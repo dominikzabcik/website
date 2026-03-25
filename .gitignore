@@ -14,6 +14,19 @@
 .eslintcache
 .next
 out
+dist
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# OS / editor junk
+Thumbs.db
+*.swp
+*~
+
+# Local tool caches
+.cache/
 
 # Yarn
 .yarn/*
@@ -28,8 +41,8 @@ out
 # Cloud9 IDE files
 .c9
 
-# Cursor local state
-.cursor/hooks/state/
+# Cursor (local hooks/state, MCP cache, etc.; add `!.cursor/rules` if you commit rules)
+.cursor/
 
 # TypeScript build cache
 *.tsbuildinfo

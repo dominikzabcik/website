@@ -18,10 +18,7 @@ export function getAge(): number {
     const today = new Date();
     let years = today.getFullYear() - dob.getFullYear();
     const monthDiff = today.getMonth() - dob.getMonth();
-    if (
-        monthDiff < 0 ||
-        (monthDiff === 0 && today.getDate() < dob.getDate())
-    ) {
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
         years--;
     }
     return years;
@@ -43,11 +40,7 @@ export const nextBirthdayYear =
 
 export const daysUntilBirthday = RelativeTimeFormatter.formatToParts(
     Math.floor(
-        (new Date(
-            nextBirthdayYear,
-            dob.getMonth(),
-            dob.getDate(),
-        ).getTime() -
+        (new Date(nextBirthdayYear, dob.getMonth(), dob.getDate()).getTime() -
             Date.now()) /
             1000 /
             60 /
@@ -61,4 +54,4 @@ export const daysUntilBirthday = RelativeTimeFormatter.formatToParts(
 export const location = 'Prague, Czech Republic';
 
 /** Lanyard / Discord presence — uncomment when re-enabling Lanyard on the home page. */
-// export const discordId = '268798547439255572';
+export const discordId = '205198692544806912';

@@ -1,23 +1,16 @@
 'use client';
 
 /**
- * Lanyard (Discord + Spotify) is temporarily disabled — nothing deleted.
- * Full components + layout notes: `src/components/home-lanyard-reference.tsx`
- * Uncomment `discordId` in `src/utils/constants.ts`, then wire imports / Props /
- * getStaticProps / useLanyardWS and paste the blocks from the reference file.
- *
- * --- Lanyard imports (uncomment when re-enabling) ---
- * import { useLanyardWS, type Types as LanyardTypes } from 'use-lanyard';
- * import { getLanyard } from '../server/lanyard';
- * import { discordId } from '../utils/constants';
- * import { SiSpotify } from 'react-icons/si';
- * import { DiscordStatusCard, SpotifyCard } from '../components/home-lanyard-reference';
+ * Lanyard: Spotify card live (presence via `useLanyardWS`).
+ * Discord status UI is commented below for reuse — see `home-lanyard-reference.tsx`.
  */
 
 import { motion } from 'framer-motion';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { FiArrowUpRight, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { SiSpotify } from 'react-icons/si';
+import { useLanyardWS, type Types as LanyardTypes } from 'use-lanyard';
 import {
     SiDocker,
     SiGo,
@@ -34,13 +27,17 @@ import { CardHoverEffect } from '../components/hover-card';
 import { Time } from '../components/time';
 import matrix from '../images/matrix.gif';
 import profilePhoto from '../images/dominik-profile.png';
-import { getAge, location } from '../utils/constants';
+import { discordId, getAge, location } from '../utils/constants';
 import { getMapImage } from '../server/apple-maps';
+import { getLanyard } from '../server/lanyard';
+// import { DiscordStatusCard } from '../components/home-lanyard-reference';
+import { SpotifyCard } from '../components/home-lanyard-reference';
 
 export interface Props {
     location: string;
     map: string;
     mapSource: 'apple' | 'mapbox' | 'carto';
+    lanyard: LanyardTypes.Presence | null;
 }
 
 const containerVariants = {
@@ -68,6 +65,12 @@ const itemVariants = {
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const { url: map, source: mapSource } = getMapImage(location);
+    let lanyard: LanyardTypes.Presence | null = null;
+    try {
+        lanyard = await getLanyard(discordId);
+    } catch {
+        lanyard = null;
+    }
 
     return {
         revalidate: 10,
@@ -75,6 +78,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
             location,
             map,
             mapSource,
+            lanyard,
         },
     };
 };
@@ -94,6 +98,10 @@ function TechIcon({ icon: Icon, label }: { icon: React.ElementType; label: strin
 }
 
 export default function Home(props: Props) {
+    const lanyard = props.lanyard
+        ? useLanyardWS(discordId, { initialData: props.lanyard })
+        : useLanyardWS(discordId);
+
     return (
         <div className="relative min-h-screen">
             {/* Background Effects */}
@@ -158,8 +166,21 @@ export default function Home(props: Props) {
                         </CardHoverEffect>
                     </motion.div>
 
-                    {/* Row 2: Time (dominant 4-col) + GitHub (compact 2-col) */}
-                    {/* Time & Birthday - takes visual priority */}
+                    {/*
+                    Discord status (Lanyard) — re-enable: uncomment import + block below.
+                    {lanyard ? (
+                        <DiscordStatusCard itemVariants={itemVariants} lanyard={lanyard} />
+                    ) : (
+                        <motion.div variants={itemVariants} className="col-span-3 md:col-span-2">
+                            <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 p-6 text-white">
+                                <span className="text-sm font-medium">Discord</span>
+                                <span className="text-xs opacity-80">Unavailable</span>
+                            </div>
+                        </motion.div>
+                    )}
+                    */}
+
+                    {/* Time & Birthday */}
                     <motion.div variants={itemVariants} className="col-span-6 md:col-span-4">
                         <Time />
                     </motion.div>
@@ -186,7 +207,44 @@ export default function Home(props: Props) {
                         </CardHoverEffect>
                     </motion.div>
 
-                    {/* Row 3: Maps (dominant 4-col) + Tech Stack (compact 2-col sidebar) */}
+                    {/* Spotify (Lanyard) */}
+                    {lanyard ? (
+                        <SpotifyCard itemVariants={itemVariants} lanyard={lanyard} />
+                    ) : (
+                        <motion.div variants={itemVariants} className="col-span-6 md:col-span-2">
+                            <CardHoverEffect className="h-full">
+                                <Link
+                                    href="https://open.spotify.com/playlist/15bl4PuutD4aS2GVsJGUk9"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group relative flex h-full min-h-[200px] overflow-hidden rounded-3xl"
+                                >
+                                    <div className="absolute inset-0">
+                                        <img
+                                            src="https://i.scdn.co/image/ab67706c0000da84a15b50aca103257f2c7f4797"
+                                            alt=""
+                                            className="h-full w-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
+                                    </div>
+                                    <div className="relative z-10 flex h-full flex-col justify-between p-6 text-white">
+                                        <div className="flex items-center justify-between">
+                                            <SiSpotify className="h-6 w-6" />
+                                            <FiArrowUpRight className="h-5 w-5 opacity-50 transition-opacity group-hover:opacity-100" />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-medium text-white/60">Playlist</span>
+                                            <h3 className="mt-1 text-lg font-semibold">bedtime dnb</h3>
+                                            <p className="mt-0.5 text-sm text-white/70">
+                                                Drum and bass to send you to sleep
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </CardHoverEffect>
+                        </motion.div>
+                    )}
+
                     {/* Apple Maps - Prague Location */}
                     <motion.div variants={itemVariants} className="col-span-6 md:col-span-4">
                         <CardHoverEffect className="h-full">
