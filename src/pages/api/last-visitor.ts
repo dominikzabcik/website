@@ -1,6 +1,5 @@
-import { kv } from '@vercel/kv';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { env } from '../../server/env';
+import { getKv, isKvConfigured } from '../../server/kv';
 import type { LastVisitorApiResponse, LastVisitorRecord } from '../../types/last-visitor';
 
 const KV_KEY = 'site:last_visitor';
@@ -68,11 +67,12 @@ export default async function handler(
         return res.status(405).end();
     }
 
-    const hasKv =
-        Boolean(env.KV_REST_API_URL?.trim()) &&
-        Boolean(env.KV_REST_API_TOKEN?.trim());
+    if (!isKvConfigured()) {
+        return res.status(200).json({ enabled: false, previous: null });
+    }
 
-    if (!hasKv) {
+    const kv = getKv();
+    if (!kv) {
         return res.status(200).json({ enabled: false, previous: null });
     }
 

@@ -20,9 +20,11 @@ export const env = z
         TURNSTILE_SECRET_KEY: z.string().default(''),
         /** Optional — Mapbox Static Images for a clean “Apple-like” map when MapKit isn’t configured. */
         MAPBOX_ACCESS_TOKEN: z.string().optional(),
-        /** Optional — Vercel KV (`@vercel/kv` reads these from `process.env`). */
+        /** Optional — Vercel KV / Redis REST (`src/server/kv.ts` also accepts Upstash names). */
         KV_REST_API_URL: z.string().optional(),
         KV_REST_API_TOKEN: z.string().optional(),
+        UPSTASH_REDIS_REST_URL: z.string().optional(),
+        UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
         /** Optional — Spotify Web API “now playing” (no Discord). Needs app + refresh token. */
         SPOTIFY_CLIENT_ID: z.string().optional(),
         SPOTIFY_CLIENT_SECRET: z.string().optional(),

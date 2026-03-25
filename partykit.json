@@ -1,0 +1,5 @@
+{
+    "name": "dominik-website-ttt",
+    "main": "party/tic-tac-toe.ts",
+    "compatibilityDate": "2025-03-01"
+}

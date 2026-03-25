@@ -1,10 +1,8 @@
-import { config as dotenv } from 'dotenv';
-
 // @ts-check
 
 /** @type {import("next").NextConfig} */
 const config = {
-    env: dotenv().parsed,
+    transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],
 
     images: {
         remotePatterns: [

@@ -1,34 +1,48 @@
+# Dependencies
 /node_modules
 /.pnp
 .pnp.js
-/build
-.DS_Store
+
+# Next.js
+/.next/
+/out/
+/build/
+
+# Env & secrets (never commit real keys)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.log
+.env.*
+!.env.example
+*.pem
+*.p8
+
+# Vercel
 .vercel
-.idea
+
+# TypeScript / tooling caches
+*.tsbuildinfo
 .eslintcache
-.next
-out
-dist
+.turbo/
+.cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Test / coverage
 coverage/
 .nyc_output/
 
-# OS / editor junk
+# OS / editor
+.DS_Store
 Thumbs.db
 *.swp
 *~
+.idea/
 
-# Local tool caches
-.cache/
-
-# Yarn
+# Yarn (Berry)
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
@@ -38,11 +52,16 @@ Thumbs.db
 # bun
 *.bun
 
-# Cloud9 IDE files
+# PartyKit (local dev / CLI artifacts)
+.partykit/
+
+# Cloud9
 .c9
 
-# Cursor (local hooks/state, MCP cache, etc.; add `!.cursor/rules` if you commit rules)
+# Cursor — keep rules if you add them: uncomment the two lines below and remove `.cursor/` if desired
 .cursor/
 
-# TypeScript build cache
-*.tsbuildinfo
+# Playwright (if you add e2e later)
+/test-results/
+/playwright-report/
+blob-report/

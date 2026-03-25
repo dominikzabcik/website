@@ -1,5 +1,4 @@
-import { kv } from '@vercel/kv';
-import { env } from './env';
+import { getKv, isKvConfigured } from './kv';
 import { getSpotifyNowPlaying, spotifyConfigured } from './spotify';
 import type { SpotifyNowPlayingApiResponse } from '../types/spotify-now-playing';
 
@@ -8,12 +7,6 @@ const KV_KEY = 'site:spotify_now_playing';
 /** Shared snapshot for all visitors; refreshed from Spotify only when TTL expires. */
 const TTL_PLAYING_SEC = 20;
 const TTL_IDLE_SEC = 40;
-
-function hasKv(): boolean {
-    return Boolean(
-        env.KV_REST_API_URL?.trim() && env.KV_REST_API_TOKEN?.trim(),
-    );
-}
 
 /**
  * Public “now playing” payload: one cached answer for everyone (KV), so Spotify’s
@@ -24,22 +17,25 @@ export async function getSpotifyNowPlayingPublic(): Promise<SpotifyNowPlayingApi
         return { configured: false };
     }
 
-    if (hasKv()) {
-        try {
-            const raw = await kv.get<string>(KV_KEY);
-            if (raw != null && raw.length > 0) {
-                const parsed = JSON.parse(raw) as SpotifyNowPlayingApiResponse;
-                if (
-                    parsed &&
-                    typeof parsed === 'object' &&
-                    'configured' in parsed &&
-                    parsed.configured === true
-                ) {
-                    return parsed;
+    if (isKvConfigured()) {
+        const kv = getKv();
+        if (kv) {
+            try {
+                const raw = await kv.get<string>(KV_KEY);
+                if (raw != null && raw.length > 0) {
+                    const parsed = JSON.parse(raw) as SpotifyNowPlayingApiResponse;
+                    if (
+                        parsed &&
+                        typeof parsed === 'object' &&
+                        'configured' in parsed &&
+                        parsed.configured === true
+                    ) {
+                        return parsed;
+                    }
                 }
+            } catch (e) {
+                console.error('[spotify-public] kv get', e);
             }
-        } catch (e) {
-            console.error('[spotify-public] kv get', e);
         }
     }
 
@@ -67,7 +63,13 @@ async function persistKv(
     response: SpotifyNowPlayingApiResponse,
     ttlSec: number,
 ): Promise<void> {
-    if (!hasKv()) return;
+    if (!isKvConfigured()) {
+        return;
+    }
+    const kv = getKv();
+    if (!kv) {
+        return;
+    }
     try {
         await kv.set(KV_KEY, JSON.stringify(response), { ex: ttlSec });
     } catch (e) {
