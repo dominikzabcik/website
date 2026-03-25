@@ -1,10 +1,10 @@
 'use client';
 
 import { Turnstile } from '@marsidev/react-turnstile';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { FiSend, FiCheck, FiLoader } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { FiCheck, FiLoader, FiSend } from 'react-icons/fi';
 
 export function ContactForm() {
     const [submitted, setSubmitted] = useState(false);
@@ -80,15 +80,17 @@ export function ContactForm() {
                 className="space-y-4"
             >
                 {/* Email Field */}
-                <motion.div 
+                <motion.div
                     className="relative"
                     initial={false}
-                    animate={{ 
+                    animate={{
                         scale: focusedField === 'email' ? 1.02 : 1,
                     }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
-                    <label htmlFor="email" className="sr-only">Email</label>
+                    <label htmlFor="email" className="sr-only">
+                        Email
+                    </label>
                     <input
                         type="email"
                         name="email"
@@ -102,15 +104,17 @@ export function ContactForm() {
                 </motion.div>
 
                 {/* Message Field */}
-                <motion.div 
+                <motion.div
                     className="relative"
                     initial={false}
-                    animate={{ 
+                    animate={{
                         scale: focusedField === 'body' ? 1.02 : 1,
                     }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
-                    <label htmlFor="body" className="sr-only">Message</label>
+                    <label htmlFor="body" className="sr-only">
+                        Message
+                    </label>
                     <textarea
                         id="body"
                         name="body"
@@ -127,7 +131,7 @@ export function ContactForm() {
                 <Turnstile
                     options={{ responseFieldName: 'turnstile' }}
                     style={{ display: 'none' }}
-                    siteKey="0x4AAAAAAABwxsgAijQAi5FS"
+                    siteKey="0x4AAAAAACvtLekwtfbht2w3"
                 />
 
                 {/* Submit Button */}
@@ -163,7 +167,7 @@ export function ContactForm() {
                             </motion.span>
                         )}
                     </AnimatePresence>
-                    
+
                     {/* Shine effect */}
                     <motion.div
                         className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent"

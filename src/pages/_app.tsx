@@ -6,6 +6,7 @@ import localFont from 'next/font/local';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { LastVisitorProvider } from '../components/last-visitor-provider';
 import { useFirstEverLoad, useVisitCounts } from '../hooks/use-first-ever-load';
 import { useSystemColorScheme } from '../hooks/use-system-color-scheme';
 
@@ -100,7 +101,9 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
 
             <div className={`${body.variable} ${mono.variable} ${inter.variable}`}>
-                <Component {...pageProps} />
+                <LastVisitorProvider>
+                    <Component {...pageProps} />
+                </LastVisitorProvider>
             </div>
 
             <Toaster

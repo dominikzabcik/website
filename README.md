@@ -90,8 +90,7 @@ DISCORD_WEBHOOK=https://discord.com/api/webhooks/...
 # Cloudflare Turnstile
 TURNSTILE_SECRET_KEY=your_secret_key
 
-# JWT (for auth features)
-JWT_SIGNING_SECRET=your_jwt_secret
+# Optional: Mapbox, Vercel KV — see .env.example
 ```
 
 ---

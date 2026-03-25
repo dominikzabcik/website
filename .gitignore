@@ -27,3 +27,9 @@ out
 
 # Cloud9 IDE files
 .c9
+
+# Cursor local state
+.cursor/hooks/state/
+
+# TypeScript build cache
+*.tsbuildinfo
