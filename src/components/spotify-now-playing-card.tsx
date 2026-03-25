@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
 import { FiArrowUpRight } from 'react-icons/fi';
@@ -63,15 +64,25 @@ export function SpotifyNowPlayingCard(props: { itemVariants: Variants }) {
                     className="group relative block h-full min-h-[200px] w-full min-w-0 overflow-hidden rounded-3xl"
                 >
                     <div className="absolute inset-0">
-                        <motion.img
-                            src={track.albumArtUrl}
-                            alt=""
-                            className="h-full w-full object-cover"
-                            initial={{ scale: 1.1 }}
-                            whileHover={{ scale: 1.2 }}
+                        <motion.div
+                            className="absolute inset-0 overflow-hidden"
+                            initial={{ scale: 1.04 }}
+                            whileHover={{ scale: 1.1 }}
                             transition={{ duration: 0.6 }}
+                        >
+                            <Image
+                                src={track.albumArtUrl}
+                                alt=""
+                                fill
+                                className="object-cover object-center"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                quality={92}
+                            />
+                        </motion.div>
+                        <div
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/45"
+                            aria-hidden
                         />
-                        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
                     </div>
 
                     <div className="relative z-10 flex h-full w-full min-w-0 flex-col justify-between p-6 text-white">

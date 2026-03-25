@@ -4,6 +4,24 @@ type TokenCache = { accessToken: string; expiresAtMs: number };
 
 let tokenCache: TokenCache | null = null;
 
+/** Prefer the largest cover (Spotify returns multiple sizes; order is not guaranteed). */
+function pickBestAlbumArtUrl(
+    images: { url?: string; width?: number; height?: number }[],
+): string {
+    let best: { url: string; area: number } | null = null;
+    for (const img of images) {
+        const url = img.url?.trim();
+        if (!url) continue;
+        const w = img.width ?? 0;
+        const h = img.height ?? 0;
+        const area = w > 0 && h > 0 ? w * h : w || h || 0;
+        if (!best || area > best.area) {
+            best = { url, area };
+        }
+    }
+    return best?.url ?? '';
+}
+
 function spotifyConfigured(): boolean {
     return Boolean(
         env.SPOTIFY_CLIENT_ID?.trim() &&
@@ -108,7 +126,9 @@ export async function getSpotifyNowPlaying(): Promise<
             name?: string;
             artists?: { name?: string }[];
             external_urls?: { spotify?: string };
-            album?: { images?: { url?: string }[] };
+            album?: {
+                images?: { url?: string; width?: number; height?: number }[];
+            };
         };
     };
 
@@ -122,10 +142,7 @@ export async function getSpotifyNowPlaying(): Promise<
     }
 
     const images = item.album?.images ?? [];
-    const albumArtUrl =
-        images[0]?.url ??
-        images[images.length - 1]?.url ??
-        '';
+    const albumArtUrl = pickBestAlbumArtUrl(images);
 
     if (!albumArtUrl) {
         return null;

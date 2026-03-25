@@ -8,10 +8,11 @@
 - Map hero imagery should read as clean and high-quality; single-tile default OSM stretched large is not an acceptable long-term look—prefer real MapKit, Mapbox static, or a cleaner basemap with proper attribution.
 - README and similar footers: keep copyright year aligned with the current calendar year when touched.
 - Communication: use full markdown links and proper code citation fences when referencing files.
+- Do not add introspection or “health check” API routes unless the user asks; they are easy to delete as noise.
 
 ## Learned Workspace Facts
 
-- Personal site: Next.js Pages Router, Bun, Tailwind, Framer Motion; fork lineage from `alii/website`, personalized for Dominik (Prague, NFCtron). Spotify “now playing” uses the Web API (`/api/spotify-now-playing` + `SPOTIFY_*` env vars).
+- Personal site: Next.js Pages Router, Bun, Tailwind, Framer Motion; fork lineage from `alii/website`, personalized for Dominik (Prague, NFCtron). Spotify “now playing” uses the Web API (`/api/spotify-now-playing` + `SPOTIFY_*` env vars); obtain `SPOTIFY_REFRESH_TOKEN` locally with `bun run spotify:auth` (redirect `http://127.0.0.1:8888/callback` in the Spotify app settings).
 - Environment: `src/server/env.ts` uses Zod with defaults on Apple/Discord/Turnstile so `next build` and SSG do not fail when dashboard secrets are missing; optional Mapbox and `KV_REST_*`; `isDiscordWebhookConfigured` / `isTurnstileSecretConfigured` reflect whether real values exist in `process.env`. Optional vars are documented in `.env.example`.
 - KV on Vercel is often added as Upstash Redis from the Storage marketplace; it may not appear as a product literally named KV, and it supplies env vars such as `KV_REST_API_URL` and `KV_REST_API_TOKEN` (plus related Redis/KV URLs and tokens). The same KV is used for last-visitor and a short-lived shared cache of Spotify “now playing” so every visitor does not hit Spotify’s API.
 - Static map pipeline: Apple MapKit snapshot when `APPLE_PRIV_KEY` looks like a real PEM; else Mapbox light static via `/api/map-proxy` if `MAPBOX_ACCESS_TOKEN` is set; else Carto Voyager tiles. The `staticmap.openstreetmap.de` service is treated as unreliable.
