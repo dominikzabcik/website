@@ -29,8 +29,7 @@ function statusLine(snapshot: TicTacToeSnapshot | null): string {
 }
 
 export function TicTacToeExperience() {
-    const { snapshot, connected, socketError, sendMove, sendRematch } =
-        usePartyGame();
+    const { snapshot, connected, sendMove, sendRematch } = usePartyGame();
 
     const role = snapshot?.yourRole ?? null;
     const canMove =
@@ -70,12 +69,6 @@ export function TicTacToeExperience() {
                     resets.
                 </p>
             </header>
-
-            {socketError ? (
-                <div className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-                    {socketError}
-                </div>
-            ) : null}
 
             <div className="mb-4 flex flex-wrap items-center gap-3 text-sm">
                 <span
@@ -125,31 +118,6 @@ export function TicTacToeExperience() {
                     </button>
                 </div>
             ) : null}
-
-            <section className="mt-10 rounded-2xl border border-white/10 bg-neutral-900/50 p-5 text-sm text-neutral-400">
-                <h2 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                    Local development
-                </h2>
-                <p className="mt-2 leading-relaxed">
-                    Run the Next app and PartyKit together:{' '}
-                    <code className="rounded bg-neutral-800 px-1.5 py-0.5 text-neutral-200">
-                        bun run dev:multiplayer
-                    </code>
-                    . Deploy the party with{' '}
-                    <code className="rounded bg-neutral-800 px-1.5 py-0.5 text-neutral-200">
-                        bunx partykit deploy
-                    </code>{' '}
-                    and set{' '}
-                    <code className="rounded bg-neutral-800 px-1.5 py-0.5 text-neutral-200">
-                        NEXT_PUBLIC_PARTYKIT_HOST
-                    </code>{' '}
-                    to your project host (e.g.{' '}
-                    <code className="rounded bg-neutral-800 px-1.5 py-0.5 text-neutral-200">
-                        your-project.yourname.partykit.dev
-                    </code>
-                    ).
-                </p>
-            </section>
         </div>
     );
 }

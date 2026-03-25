@@ -9,6 +9,7 @@
 - README and similar footers: keep copyright year aligned with the current calendar year when touched.
 - Communication: use full markdown links and proper code citation fences when referencing files.
 - Do not add introspection or “health check” API routes unless the user asks; they are easy to delete as noise.
+- On the experiments area, informal copy that frames builds as fun, “vibe-coded” side projects is appropriate.
 
 ## Learned Workspace Facts
 
@@ -22,3 +23,4 @@
 - Last-visitor geography uses `POST /api/last-visitor`, Vercel geo headers, and `@vercel/kv` when `KV_REST_API_URL` / `KV_REST_API_TOKEN` are configured.
 - `.gitignore` excludes `*.tsbuildinfo` and `.cursor/` so TypeScript cache and Cursor local state stay out of version control.
 - Do not place non-page reference components under `src/pages/`—Next.js will treat them as routes; use `src/components/` or similar instead.
+- Multiplayer tic-tac-toe (experiments) uses PartyKit: `partykit.json`, `party/` server, `bun run dev:multiplayer` for Next + PartyKit locally, `bun run deploy:party` for the PartyKit worker (separate from the Vercel Next deployment); `partykit.json` is safe to commit.

@@ -25,7 +25,12 @@ function emptyBoard(): Cell[] {
 function outcome(board: Cell[]): 1 | 2 | 0 | null {
     for (const [a, b, c] of WIN_LINES) {
         const v = board[a];
-        if (v !== 0 && v === board[b] && v === board[c]) {
+        if (
+            v !== undefined &&
+            v !== 0 &&
+            v === board[b] &&
+            v === board[c]
+        ) {
             return v;
         }
     }

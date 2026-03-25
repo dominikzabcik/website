@@ -33,10 +33,7 @@ function parseGeoFromRequest(req: NextApiRequest): LastVisitorRecord {
             ? rawRegion
             : undefined;
 
-    const countryName =
-        countryCode === 'XX'
-            ? 'Local development'
-            : countryNameFromCode(countryCode);
+    const countryName = countryNameFromCode(countryCode);
 
     const record: LastVisitorRecord = {
         countryCode,

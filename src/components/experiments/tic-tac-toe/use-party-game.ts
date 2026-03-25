@@ -33,7 +33,6 @@ export function getPartyHost(): string {
 export function usePartyGame() {
     const [snapshot, setSnapshot] = useState<TicTacToeSnapshot | null>(null);
     const [connected, setConnected] = useState(false);
-    const [socketError, setSocketError] = useState<string | null>(null);
     const socketRef = useRef<PartySocket | null>(null);
 
     const token = useMemo(() => getOrCreateToken(), []);
@@ -64,7 +63,6 @@ export function usePartyGame() {
 
         const onOpen = () => {
             setConnected(true);
-            setSocketError(null);
             ws.send(JSON.stringify({ type: 'hello', token }));
         };
 
@@ -83,22 +81,14 @@ export function usePartyGame() {
             setConnected(false);
         };
 
-        const onError = () => {
-            setSocketError(
-                'Could not connect to the game server. Run PartyKit locally (see this page) or set NEXT_PUBLIC_PARTYKIT_HOST.',
-            );
-        };
-
         ws.addEventListener('open', onOpen);
         ws.addEventListener('message', onMessage);
         ws.addEventListener('close', onClose);
-        ws.addEventListener('error', onError);
 
         return () => {
             ws.removeEventListener('open', onOpen);
             ws.removeEventListener('message', onMessage);
             ws.removeEventListener('close', onClose);
-            ws.removeEventListener('error', onError);
             socketRef.current = null;
             ws.close();
         };
@@ -107,7 +97,6 @@ export function usePartyGame() {
     return {
         snapshot,
         connected,
-        socketError,
         sendMove,
         sendRematch,
     };
