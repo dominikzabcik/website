@@ -1,5 +1,6 @@
-export const UKTimeFormatter = new Intl.DateTimeFormat(undefined, {
-    timeZone: 'Europe/London',
+// Prague timezone formatter
+export const PragueTimeFormatter = new Intl.DateTimeFormat(undefined, {
+    timeZone: 'Europe/Prague',
     hour: 'numeric',
     minute: 'numeric',
     hour12: false,
@@ -9,22 +10,43 @@ export const RelativeTimeFormatter = new Intl.RelativeTimeFormat('en', {
     style: 'long',
 });
 
-export const discordId = '268798547439255572';
+/** Date of birth — 17 November 2003 */
+export const dob = new Date('2003-11-17T12:00:00');
 
-export const dob = new Date('2004-11-02');
-export const age = new Date(Date.now() - dob.getTime()).getUTCFullYear() - 1970;
-export const hasHadBirthdayThisYear =
-    new Date().getMonth() >= dob.getMonth() &&
-    new Date().getDate() >= dob.getDate();
+/** Age in full years (updates correctly around birthdays). */
+export function getAge(): number {
+    const today = new Date();
+    let years = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < dob.getDate())
+    ) {
+        years--;
+    }
+    return years;
+}
+
+/** Whether this calendar year's birthday has already occurred. */
+export const hasHadBirthdayThisYear = (() => {
+    const now = new Date();
+    const thisYearBirthday = new Date(
+        now.getFullYear(),
+        dob.getMonth(),
+        dob.getDate(),
+    );
+    return now >= thisYearBirthday;
+})();
 
 export const nextBirthdayYear =
     new Date().getFullYear() + (hasHadBirthdayThisYear ? 1 : 0);
+
 export const daysUntilBirthday = RelativeTimeFormatter.formatToParts(
     Math.floor(
         (new Date(
             nextBirthdayYear,
             dob.getMonth(),
-            dob.getDay() + 1,
+            dob.getDate(),
         ).getTime() -
             Date.now()) /
             1000 /
@@ -34,3 +56,9 @@ export const daysUntilBirthday = RelativeTimeFormatter.formatToParts(
     ),
     'day',
 )[1]!.value.toString();
+
+// Hardcoded location for Apple Maps
+export const location = 'Prague, Czech Republic';
+
+/** Lanyard / Discord presence — uncomment when re-enabling Lanyard on the home page. */
+// export const discordId = '268798547439255572';

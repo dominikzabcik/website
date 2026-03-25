@@ -13,5 +13,7 @@ export const env = z
             .pipe(z.string().url()),
         DEFAULT_LOCATION: z.string().default('London'),
         JWT_SIGNING_SECRET: z.string(),
+        /** Optional — Mapbox Static Images for a clean “Apple-like” map when MapKit isn’t configured. */
+        MAPBOX_ACCESS_TOKEN: z.string().optional(),
     })
     .parse(process.env);

@@ -1,9 +1,10 @@
-import type { LanyardResponse, Snowflake } from 'use-lanyard';
+import type { Types, API } from '@prequist/lanyard';
 
-export async function getLanyard(id: Snowflake) {
-    const lanyard = await fetch(`https://api.lanyard.rest/v1/users/${id}`).then(
-        (res) => res.json() as Promise<LanyardResponse>,
-    );
+export type Snowflake = Types.Snowflake;
+
+export async function getLanyard(id: Snowflake): Promise<Types.Presence> {
+    const response = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+    const lanyard = await response.json() as API.EitherAPIResponse<Types.Presence>;
 
     if (!lanyard.success) {
         throw new Error('Lanyard API failed');

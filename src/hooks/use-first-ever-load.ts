@@ -1,4 +1,4 @@
-import { useLocalStorage } from 'alistair/hooks';
+import { useLocalStorage } from './use-local-storage';
 import { useRouter } from 'next/router';
 
 export function useFirstEverLoad() {
