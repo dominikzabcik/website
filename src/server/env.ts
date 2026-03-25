@@ -23,6 +23,10 @@ export const env = z
         /** Optional — Vercel KV (`@vercel/kv` reads these from `process.env`). */
         KV_REST_API_URL: z.string().optional(),
         KV_REST_API_TOKEN: z.string().optional(),
+        /** Optional — Spotify Web API “now playing” (no Discord). Needs app + refresh token. */
+        SPOTIFY_CLIENT_ID: z.string().optional(),
+        SPOTIFY_CLIENT_SECRET: z.string().optional(),
+        SPOTIFY_REFRESH_TOKEN: z.string().optional(),
     })
     .parse(process.env);
 

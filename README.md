@@ -24,7 +24,7 @@ This is my personal portfolio website showcasing my work as a **22-year-old Full
 ### ✨ Features
 
 - 🎨 **Modern Design** — Glassmorphism UI with gradient orbs and animated backgrounds
-- ⚡ **Real-time Data** — Discord status via Lanyard, Spotify currently playing
+- ⚡ **Live Spotify** — Currently playing via Spotify Web API (when configured)
 - 🗺️ **Interactive Map** — Apple Maps integration showing Prague location
 - 📱 **Fully Responsive** — Optimized for all devices
 - 🌓 **Dark Mode** — Automatic dark/light theme switching
@@ -50,9 +50,8 @@ This is my personal portfolio website showcasing my work as a **22-year-old Full
 - **React Icons** — Icon library
 
 ### Data & APIs
-- **Lanyard** — Real-time Discord presence
+- **Spotify Web API** — “Now playing” on the homepage (optional `SPOTIFY_*` env)
 - **Apple MapKit** — Static map snapshots
-- **use-lanyard** — WebSocket connection to Lanyard API
 
 ---
 

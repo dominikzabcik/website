@@ -1,15 +1,13 @@
 'use client';
 
 /**
- * Lanyard: Spotify card live (presence via `useLanyardWS`).
- * Discord status UI is commented below for reuse — see `home-lanyard-reference.tsx`.
+ * Spotify “now playing” uses the Web API (`/api/spotify-now-playing`).
  */
 
 import { motion } from 'framer-motion';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { FiArrowUpRight, FiGithub, FiLinkedin } from 'react-icons/fi';
-import { useLanyardWS, type Types as LanyardTypes } from 'use-lanyard';
 import {
     SiDocker,
     SiGo,
@@ -26,17 +24,14 @@ import { CardHoverEffect } from '../components/hover-card';
 import { Time } from '../components/time';
 import matrix from '../images/matrix.gif';
 import profilePhoto from '../images/dominik-profile.png';
-import { discordId, getAge, location } from '../utils/constants';
+import { getAge, location } from '../utils/constants';
 import { getMapImage } from '../server/apple-maps';
-import { getLanyard } from '../server/lanyard';
-// import { DiscordStatusCard } from '../components/home-lanyard-reference';
-import { SpotifyCard } from '../components/home-lanyard-reference';
+import { SpotifyNowPlayingCard } from '../components/spotify-now-playing-card';
 
 export interface Props {
     location: string;
     map: string;
     mapSource: 'apple' | 'mapbox' | 'carto';
-    lanyard: LanyardTypes.Presence | null;
 }
 
 const containerVariants = {
@@ -64,12 +59,6 @@ const itemVariants = {
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const { url: map, source: mapSource } = getMapImage(location);
-    let lanyard: LanyardTypes.Presence | null = null;
-    try {
-        lanyard = await getLanyard(discordId);
-    } catch {
-        lanyard = null;
-    }
 
     return {
         revalidate: 10,
@@ -77,7 +66,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
             location,
             map,
             mapSource,
-            lanyard,
         },
     };
 };
@@ -97,10 +85,6 @@ function TechIcon({ icon: Icon, label }: { icon: React.ElementType; label: strin
 }
 
 export default function Home(props: Props) {
-    const lanyard = props.lanyard
-        ? useLanyardWS(discordId, { initialData: props.lanyard })
-        : useLanyardWS(discordId);
-
     return (
         <div className="relative min-h-screen">
             {/* Background Effects */}
@@ -165,20 +149,6 @@ export default function Home(props: Props) {
                         </CardHoverEffect>
                     </motion.div>
 
-                    {/*
-                    Discord status (Lanyard) — re-enable: uncomment import + block below.
-                    {lanyard ? (
-                        <DiscordStatusCard itemVariants={itemVariants} lanyard={lanyard} />
-                    ) : (
-                        <motion.div variants={itemVariants} className="col-span-3 md:col-span-2">
-                            <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 p-6 text-white">
-                                <span className="text-sm font-medium">Discord</span>
-                                <span className="text-xs opacity-80">Unavailable</span>
-                            </div>
-                        </motion.div>
-                    )}
-                    */}
-
                     {/* Time & Birthday */}
                     <motion.div variants={itemVariants} className="col-span-6 md:col-span-4">
                         <Time />
@@ -206,10 +176,8 @@ export default function Home(props: Props) {
                         </CardHoverEffect>
                     </motion.div>
 
-                    {/* Spotify (Lanyard) — only while a track is playing */}
-                    {lanyard && (
-                        <SpotifyCard itemVariants={itemVariants} lanyard={lanyard} />
-                    )}
+                    {/* Spotify — Web API; card only when something is playing */}
+                    <SpotifyNowPlayingCard itemVariants={itemVariants} />
 
                     {/* Apple Maps - Prague Location */}
                     <motion.div variants={itemVariants} className="col-span-6 md:col-span-4">

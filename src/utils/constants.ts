@@ -52,7 +52,3 @@ export const daysUntilBirthday = RelativeTimeFormatter.formatToParts(
 
 // Hardcoded location for Apple Maps
 export const location = 'Prague, Czech Republic';
-
-/** Lanyard / Discord presence — uncomment when re-enabling Lanyard on the home page. */
-export const discordId = '205198692544806912';
-
