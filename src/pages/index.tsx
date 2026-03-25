@@ -9,7 +9,6 @@ import { motion } from 'framer-motion';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { FiArrowUpRight, FiGithub, FiLinkedin } from 'react-icons/fi';
-import { SiSpotify } from 'react-icons/si';
 import { useLanyardWS, type Types as LanyardTypes } from 'use-lanyard';
 import {
     SiDocker,
@@ -207,42 +206,9 @@ export default function Home(props: Props) {
                         </CardHoverEffect>
                     </motion.div>
 
-                    {/* Spotify (Lanyard) */}
-                    {lanyard ? (
+                    {/* Spotify (Lanyard) — only while a track is playing */}
+                    {lanyard && (
                         <SpotifyCard itemVariants={itemVariants} lanyard={lanyard} />
-                    ) : (
-                        <motion.div variants={itemVariants} className="col-span-6 md:col-span-2">
-                            <CardHoverEffect className="h-full">
-                                <Link
-                                    href="https://open.spotify.com/playlist/15bl4PuutD4aS2GVsJGUk9"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group relative flex h-full min-h-[200px] overflow-hidden rounded-3xl"
-                                >
-                                    <div className="absolute inset-0">
-                                        <img
-                                            src="https://i.scdn.co/image/ab67706c0000da84a15b50aca103257f2c7f4797"
-                                            alt=""
-                                            className="h-full w-full object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
-                                    </div>
-                                    <div className="relative z-10 flex h-full flex-col justify-between p-6 text-white">
-                                        <div className="flex items-center justify-between">
-                                            <SiSpotify className="h-6 w-6" />
-                                            <FiArrowUpRight className="h-5 w-5 opacity-50 transition-opacity group-hover:opacity-100" />
-                                        </div>
-                                        <div>
-                                            <span className="text-xs font-medium text-white/60">Playlist</span>
-                                            <h3 className="mt-1 text-lg font-semibold">bedtime dnb</h3>
-                                            <p className="mt-0.5 text-sm text-white/70">
-                                                Drum and bass to send you to sleep
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </CardHoverEffect>
-                        </motion.div>
                     )}
 
                     {/* Apple Maps - Prague Location */}

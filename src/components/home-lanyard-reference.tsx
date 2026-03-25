@@ -78,38 +78,35 @@ export function SpotifyCard(props: {
     lanyard: LanyardTypes.Presence;
 }) {
     const { itemVariants, lanyard } = props;
-    const isListening = lanyard?.spotify && lanyard.spotify.album_art_url;
+    const spotify = lanyard.spotify;
+    if (
+        !spotify?.track_id ||
+        !spotify.album_art_url ||
+        spotify.album_art_url.length === 0
+    ) {
+        return null;
+    }
+
+    const { track_id, album_art_url, song, artist } = spotify;
 
     return (
         <motion.div variants={itemVariants} className="col-span-6 md:col-span-2">
             <CardHoverEffect className="h-full">
                 <Link
-                    href={
-                        isListening
-                            ? `https://open.spotify.com/track/${lanyard.spotify?.track_id}`
-                            : 'https://open.spotify.com/playlist/15bl4PuutD4aS2GVsJGUk9'
-                    }
+                    href={`https://open.spotify.com/track/${track_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group relative flex h-full min-h-[200px] overflow-hidden rounded-3xl"
                 >
                     <div className="absolute inset-0">
-                        {isListening && lanyard.spotify?.album_art_url ? (
-                            <motion.img
-                                src={lanyard.spotify.album_art_url}
-                                alt=""
-                                className="h-full w-full object-cover"
-                                initial={{ scale: 1.1 }}
-                                whileHover={{ scale: 1.2 }}
-                                transition={{ duration: 0.6 }}
-                            />
-                        ) : (
-                            <img
-                                src="https://i.scdn.co/image/ab67706c0000da84a15b50aca103257f2c7f4797"
-                                alt=""
-                                className="h-full w-full object-cover"
-                            />
-                        )}
+                        <motion.img
+                            src={album_art_url}
+                            alt=""
+                            className="h-full w-full object-cover"
+                            initial={{ scale: 1.1 }}
+                            whileHover={{ scale: 1.2 }}
+                            transition={{ duration: 0.6 }}
+                        />
                         <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
                     </div>
 
@@ -120,39 +117,27 @@ export function SpotifyCard(props: {
                         </div>
 
                         <div>
-                            {isListening ? (
-                                <>
-                                    <div className="flex items-center gap-2">
-                                        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                                        <span className="text-xs font-medium text-emerald-400">
-                                            Now Playing
-                                        </span>
-                                    </div>
-                                    <h3
-                                        className="mt-2 line-clamp-1 text-lg font-semibold"
-                                        suppressHydrationWarning
-                                    >
-                                        {lanyard.spotify?.song}
-                                    </h3>
-                                    <p
-                                        className="mt-0.5 line-clamp-1 text-sm text-white/70"
-                                        suppressHydrationWarning
-                                    >
-                                        {formatList(
-                                            lanyard.spotify?.artist?.split('; ') || [],
-                                            'conjunction',
-                                        )}
-                                    </p>
-                                </>
-                            ) : (
-                                <>
-                                    <span className="text-xs font-medium text-white/60">Playlist</span>
-                                    <h3 className="mt-1 text-lg font-semibold">bedtime dnb</h3>
-                                    <p className="mt-0.5 text-sm text-white/70">
-                                        Drum and bass to send you to sleep
-                                    </p>
-                                </>
-                            )}
+                            <div className="flex items-center gap-2">
+                                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                                <span className="text-xs font-medium text-emerald-400">
+                                    Now Playing
+                                </span>
+                            </div>
+                            <h3
+                                className="mt-2 line-clamp-1 text-lg font-semibold"
+                                suppressHydrationWarning
+                            >
+                                {song}
+                            </h3>
+                            <p
+                                className="mt-0.5 line-clamp-1 text-sm text-white/70"
+                                suppressHydrationWarning
+                            >
+                                {formatList(
+                                    artist?.split('; ') || [],
+                                    'conjunction',
+                                )}
+                            </p>
                         </div>
                     </div>
                 </Link>
