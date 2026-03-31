@@ -176,7 +176,7 @@ function Scene(props: {
                 color="#fefce8"
                 castShadow
                 shadow-mapSize={[2048, 2048]}
-                shadowBias={-0.0002}
+                shadow-bias={-0.0002}
             />
             <directionalLight
                 position={[-4, 5, -3]}

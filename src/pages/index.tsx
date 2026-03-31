@@ -7,6 +7,7 @@
 import { motion } from 'framer-motion';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
+import type { IconType } from 'react-icons';
 import { FiArrowUpRight, FiGithub, FiLinkedin } from 'react-icons/fi';
 import {
     SiDocker,
@@ -71,7 +72,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 };
 
 // Tech icon with hover effect
-function TechIcon({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
+function TechIcon({ icon: Icon, label }: { icon: IconType; label: string }) {
     return (
         <motion.div
             whileHover={{ scale: 1.2, rotate: 5 }}

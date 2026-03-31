@@ -264,7 +264,7 @@ export default class TicTacToeRoom implements Party.Server {
         this.broadcastState();
     }
 
-    onConnect(connection: Party.Connection): void {
+    onConnect(_connection: Party.Connection): void {
         this.broadcastState();
     }
 
